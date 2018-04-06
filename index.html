@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Musikkorpset Ljom Lotteri</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script src="scripts/lotteri.js" defer="defer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+</head>
+
+<body>
+
+    <div class="columns">
+        <div class="column">
+            <section class="section">
+                <h1 class="title">Loddbøker</h1>
+                <h2 class="subtitle">Legg til loddbøker</h2>
+                <form data-bind="submit:addLoddbok">
+                    <div data-bind="foreach: loddboker">
+                        <div class="columns is-mobile">
+                            <div class="column">
+                                <span data-bind="text: name"></span>
+                            </div>
+                            <div class="column">
+                                <span data-bind="text: ticketCount">
+                            </div>
+                            <div class="column is-narrow">
+                                <button class="button is-danger" data-bind="click: $parent.removeLoddbok">
+                                    <span class="fas fa-trash"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="control has-icons-left">
+                            <input class="input" type="text" data-bind='value:name, valueUpdate: "afterkeydown"' placeholder="Navn" />
+                            <span class="icon is-left">
+                                    <i class="fas fa-book"></i>
+                                  </span>
+                        </div>
+                        </div>
+                        <div class="column">
+                                <div class="control has-icons-left">
+                            <input class="input" type="number" data-bind='value:ticketCount, valueUpdate: "afterkeydown"' placeholder="Antall lodd" />
+                            <span class="icon is-left">
+                                    <i class="fas fa-ticket-alt"></i>
+                                  </span>
+                        </div>
+                        </div>
+                        <div class="column">
+                            <button class="button is-link" type="submit" data-bind="enable: canAddLoddbok()">Legg til</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            <section class="section">
+                <p style="padding-bottom: 1em">
+                    <button class="button is-link" data-bind="click: generateTickets, enable: canGenerateTickets()">Generere lodd</button>
+                </p>
+                <p data-bind="visible: generatedTicketsCount() > 0">Det er generert
+                    <span data-bind="text: generatedTicketsCount"></span> lodd.</p>
+            </section>
+        </div>
+        <div class="column">
+            <section class="section">
+                <h1 class="title">Trekning</h1>
+                <h2 class="subtitle" data-bind="visible: availableTicketsCount() > 0">Det er
+                    <span data-bind="text: availableTicketsCount"></span> lodd med i trekningen.</h2>
+                <p style="padding-bottom: 1em">
+                    <button class="button is-link is-medium" data-bind="click: draw,enable: canDrawTickets()">Trekk lodd</button>
+                </p>
+
+                <h1 class="title is-medium" data-bind="visible: winnerTicket()">
+                        <span data-bind="text: winnerTicket"></span>
+                </h1>
+                <h2 class="subtitle" data-bind="visible: winnerHistory().length > 0">Historikk</h2>
+                <div data-bind="foreach: winnerHistory">
+                    <div data-bind="text: $data"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+
+</html>
