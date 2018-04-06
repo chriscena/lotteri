@@ -6,20 +6,27 @@ var Lotteri = function () {
     self.name = ko.observable('');
     self.ticketCount = ko.observable('');
 
+    self.winnerTicket = ko.observable();
+    self.winnerHistory = ko.observableArray();
+
     self.canAddLoddbok = ko.computed(function () {
         return self.name().length > 0 && self.ticketCount() > 0;
     }, this);
 
+    self.canResetHistory = ko.computed(function () {
+        return self.winnerHistory().length > 0;
+    }, this);
+
     self.addLoddbok = function () {
         self.loddboker.push({ name: self.name(), ticketCount: self.ticketCount() });
+        self.generateTickets();
         self.name('');
         self.ticketCount('');
     };
 
     self.removeLoddbok = function () {
         self.loddboker.remove(this);
-        self.tickets.removeAll();
-        self.generatedTicketsCount(0);
+        self.generateTickets();
     };
 
     self.tickets = ko.observableArray();
@@ -29,13 +36,8 @@ var Lotteri = function () {
         return self.tickets().length;
     }, this);
 
-    self.canGenerateTickets = ko.computed(function() {
-        return self.loddboker().length > 0;
-    });
-
     self.generateTickets = function () {
         self.tickets.removeAll();
-        self.winnerHistory.removeAll();
         self.winnerTicket('');
         for (var i = 0; i < self.loddboker().length; i++) {
             var loddbok = self.loddboker()[i];
@@ -46,12 +48,13 @@ var Lotteri = function () {
         self.generatedTicketsCount(self.availableTicketsCount());
     };
 
-    self.winnerTicket = ko.observable();
-    self.winnerHistory = ko.observableArray();
-
     self.canDrawTickets = ko.computed(function() {
         return self.tickets().length > 0;
     });
+
+    self.reset = function () {
+        self.winnerHistory.removeAll();
+    };
 
     // the Fisher–Yates shuffle
     self.draw = function () {
@@ -66,9 +69,8 @@ var Lotteri = function () {
             array[i] = t;
         }
 
-        if (self.winnerTicket())
-            self.winnerHistory.unshift(self.winnerTicket());
         self.winnerTicket(array[0]);
+        self.winnerHistory.unshift(array[0]);
         this.tickets.remove(array[0]);
     }
 };

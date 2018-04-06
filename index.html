@@ -12,78 +12,77 @@
 </head>
 
 <body>
-
-    <div class="columns">
-        <div class="column">
-            <section class="section">
-                <h1 class="title">Loddbøker</h1>
-                <h2 class="subtitle">Legg til loddbøker</h2>
-                <form data-bind="submit:addLoddbok">
-                    <div data-bind="foreach: loddboker">
-                        <div class="columns is-mobile">
+    <section class="section">
+            <div class="columns">
+                <div class="column">
+                    <h1 class="title">Loddbøker</h1>
+                    <h2 class="subtitle">Legg til loddbøker</h2>
+                    <form data-bind="submit:addLoddbok">
+                        <div data-bind="foreach: loddboker">
+                            <div class="columns is-mobile">
+                                <div class="column">
+                                    <span data-bind="text: name"></span>
+                                </div>
+                                <div class="column">
+                                    <span data-bind="text: ticketCount">
+                                </div>
+                                <div class="column is-narrow">
+                                    <button class="button is-danger" data-bind="click: $parent.removeLoddbok">
+                                        <span class="fas fa-trash"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
                             <div class="column">
-                                <span data-bind="text: name"></span>
-                            </div>
-                            <div class="column">
-                                <span data-bind="text: ticketCount">
-                            </div>
-                            <div class="column is-narrow">
-                                <button class="button is-danger" data-bind="click: $parent.removeLoddbok">
-                                    <span class="fas fa-trash"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="columns">
-                        <div class="column">
-                            <div class="control has-icons-left">
-                            <input class="input" type="text" data-bind='value:name, valueUpdate: "afterkeydown"' placeholder="Navn" />
-                            <span class="icon is-left">
-                                    <i class="fas fa-book"></i>
-                                  </span>
-                        </div>
-                        </div>
-                        <div class="column">
                                 <div class="control has-icons-left">
-                            <input class="input" type="number" data-bind='value:ticketCount, valueUpdate: "afterkeydown"' placeholder="Antall lodd" />
-                            <span class="icon is-left">
-                                    <i class="fas fa-ticket-alt"></i>
-                                  </span>
+                                    <input class="input" type="text" data-bind='value:name, valueUpdate: "afterkeydown"' placeholder="Navn" />
+                                    <span class="icon is-left">
+                                        <i class="fas fa-book"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="control has-icons-left">
+                                    <input class="input" type="number" data-bind='value:ticketCount, valueUpdate: "afterkeydown"' placeholder="Antall lodd" />
+                                    <span class="icon is-left">
+                                        <i class="fas fa-ticket-alt"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <button class="button is-link" type="submit" data-bind="enable: canAddLoddbok()">Legg til</button>
+                            </div>
                         </div>
+                    </form>
+                </div>
+                <div class="column">
+                    <h1 class="title">Trekning</h1>
+                    <h2 class="subtitle" data-bind="visible: availableTicketsCount() > 0">Det er
+                        <span data-bind="text: availableTicketsCount"></span> lodd med i trekningen.</h2>
+                    <p style="padding-bottom: 1em">
+                        <button class="button is-link is-medium" data-bind="click: draw, enable: canDrawTickets()">Trekk lodd</button>
+                    </p>
+
+                    <h1 class="title is-medium" data-bind="visible: winnerTicket()">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span data-bind="text: winnerTicket"></span>
+                    </h1>
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <h2 class="subtitle" data-bind="visible: winnerHistory().length > 0">Historikk</h2>
                         </div>
-                        <div class="column">
-                            <button class="button is-link" type="submit" data-bind="enable: canAddLoddbok()">Legg til</button>
+                        <div class="level-right">
+                            <button class="button is-info" data-bind="click: reset, visible: canResetHistory()">Nullstill</button>
                         </div>
                     </div>
-                </form>
-            </section>
-            <section class="section">
-                <p style="padding-bottom: 1em">
-                    <button class="button is-link" data-bind="click: generateTickets, enable: canGenerateTickets()">Generere lodd</button>
-                </p>
-                <p data-bind="visible: generatedTicketsCount() > 0">Det er generert
-                    <span data-bind="text: generatedTicketsCount"></span> lodd.</p>
-            </section>
-        </div>
-        <div class="column">
-            <section class="section">
-                <h1 class="title">Trekning</h1>
-                <h2 class="subtitle" data-bind="visible: availableTicketsCount() > 0">Det er
-                    <span data-bind="text: availableTicketsCount"></span> lodd med i trekningen.</h2>
-                <p style="padding-bottom: 1em">
-                    <button class="button is-link is-medium" data-bind="click: draw,enable: canDrawTickets()">Trekk lodd</button>
-                </p>
-
-                <h1 class="title is-medium" data-bind="visible: winnerTicket()">
-                        <span data-bind="text: winnerTicket"></span>
-                </h1>
-                <h2 class="subtitle" data-bind="visible: winnerHistory().length > 0">Historikk</h2>
-                <div data-bind="foreach: winnerHistory">
-                    <div data-bind="text: $data"></div>
+                    <div data-bind="foreach: winnerHistory">
+                        <div data-bind="text: $data"></div>
+                    </div>
                 </div>
-            </section>
+            </div>
         </div>
-    </div>
+    </section>
 </body>
 
 </html>
